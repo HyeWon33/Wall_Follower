@@ -15,57 +15,64 @@ class SelfDrive:
         Scan_Value = average(scan.ranges[225:315])
         Scan_Value_Top = average(scan.ranges[270:315])
         Scan_Value_Bottom = average(scan.ranges[225:270])
-        Scan_Value_f = average(scan.ranges[5:-5])
-        print(Scan_Value)
-        
-        
-        
-        while num == 0:
+        Scan_Value_f = average(scan.ranges[0:1])
+        print(Scan_Value_f)
+        #if Scan_Value_f >= 1.25:
+         #   turtle_vel.linear.x = 0.15
+          #  print("go")
+           # self.publisher.publish(turtle_vel)
+        #else:
+         #   turtle_vel.angular.z = (math.pi / 2)
+          #  self.publisher.publish(turtle_vel)
+           # print("go turn")
+        if Scan_Value >= 0.18 and Scan_Value <= 0.22:
+            turtle_vel.linear.x = 0.15
+            print("go")
+            self.publisher.publish(turtle_vel)
 
-            if Scan_Value_f >= 1.25:
-                turtle_vel.linear.x = 0.15
-            else:
+        elif Scan_Value > 0.22:
+            if(scan.ranges[0] <= 0.2):
+                turtle_vel.linear.x = 0.1
                 turtle_vel.angular.z = (math.pi / 2)
-                break
-
-        num == 1
-
-        while num == 1:
- 
-            if Scan_Value >= 0.15 and Scan_Value <= 0.2:
+                print("jshgerakljgrklakbmkelmreklr")
+                self.publisher.publish(turtle_vel)
+                
+            elif(Scan_Value_Top > Scan_Value_Bottom):
+                turtle_vel.angular.z = -(math.pi / 2)
+                turtle_vel.linear.x = 0.14 
+                print("R R") 
+                self.publisher.publish(turtle_vel)
+            elif(Scan_Value_Top == Scan_Value_Bottom):
                 turtle_vel.linear.x = 0.15
-                print("go")
+                self.publisher.publish(turtle_vel)
+            else: 
+                turtle_vel.angular.z = (math.pi / 9)
+                self.publisher.publish(turtle_vel) 
+                turtle_vel.linear.x = 0.08
+                print("R L")
+                self.publisher.publish(turtle_vel)
 
-            elif Scan_Value > 0.2:
+        elif Scan_Value < 1.8:
+            if(scan.ranges[0] <= 0.2):
+                turtle_vel.linear.x = 0.1
+                turtle_vel.angular.z = (math.pi / 2)
+                print("jshgerakljgrklakbmkelmreklr")
+                self.publisher.publish(turtle_vel)
             
-                if(Scan_Value_Top > Scan_Value_Bottom):
-                    turtle_vel.angular.z = -(math.pi / 2)
-                    turtle_vel.linear.x = 0.14 
-                    print("R R") 
-
-                else: 
-                    turtle_vel.angular.z = (math.pi / 9) 
-                    turtle_vel.linear.x = 0.08
-                    print("R L")
-
-            elif Scan_Value < 1.5:
-                #turtle_vel.angular.z = math.pi / 6 
-                #turtle_vel.linear.x = 0.12
-                #print("Left go")
-
-                if(Scan_Value_Top > Scan_Value_Bottom):
-                    print("Scan_Top,Bot : ",Scan_Value_Top, Scan_Value_Bottom)
-                    turtle_vel.angular.z = -(math.pi / 6)
-                    turtle_vel.linear.x = 0.14 
-                    print("L R")
-
-                else:
-                    print("Scan_Top,Bot : ",Scan_Value_Top, Scan_Value_Bottom)
-                    turtle_vel.angular.z = -(math.pi / 6)
-                    turtle_vel.linear.x = 0.14 
-                    print("L L")
-
-        self.publisher.publish(turtle_vel)
+            elif(Scan_Value_Top > Scan_Value_Bottom):
+                turtle_vel.angular.z = -(math.pi / 9)
+                turtle_vel.linear.x = 0.08
+                print("L R")
+                self.publisher.publish(turtle_vel)
+            elif(Scan_Value_Top == Scan_Value_Bottom):
+                turtle_vel.linear.x = 0.15
+                print("L G")
+                self.publisher.publish(turtle_vel)
+            else:
+                turtle_vel.angular.z = (math.pi / 6)
+                turtle_vel.linear.x = 0.14 
+                print("L L")
+                self.publisher.publish(turtle_vel)
 
 def average(list):
     return (sum(list) / len(list))
