@@ -30,32 +30,32 @@ class SelfDrive:
         elif Scan_Value > 0.2:
             turtle_vel.angular.z = -(math.pi / 4)
             turtle_vel.linear.x = 0.14 
-            print("Right go")
+            print("right go")
             
 
             if(Scan_Value_Top > Scan_Value_Bottom):
-                turtle_vel.angular.z = -(math.pi / 6)
+                turtle_vel.angular.z = -(math.pi / 8)
                 turtle_vel.linear.x = 0.14 
                 print("right go")    
                 
-            else:                
-                turtle_vel.angular.z = -(math.pi / 6) 
+            else:
+                turtle_vel.angular.z = math.pi / 4 
                 turtle_vel.linear.x = 0.14
-                print("left right go")
+                print("left go")
                 
 
         elif Scan_Value < 1.5:
             turtle_vel.angular.z = math.pi / 4 
             turtle_vel.linear.x = 0.12
-            print("Left go")
+            print("left go")
            
 
             if(Scan_Value_Top > Scan_Value_Bottom):
-                turtle_vel.angular.z = -(math.pi / 6)
+                turtle_vel.angular.z = -(math.pi / 8)
                 turtle_vel.linear.x = 0.14 
                 print("right go")
             else:
-                turtle_vel.angular.z = -(math.pi / 6)
+                turtle_vel.angular.z = -(math.pi / 8)
                 turtle_vel.linear.x = 0.14 
                 print("right go")
 
@@ -64,6 +64,9 @@ class SelfDrive:
 def average(list):
     return (sum(list) / len(list))
 
+def check_SVM(scaned_value):
+    if(scaned_value > 3):
+        turtle_vel.angular.z = -(math.pi / 4)
 
 def main():
     rospy.init_node('self_drive')
