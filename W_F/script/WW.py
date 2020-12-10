@@ -1,9 +1,10 @@
-#!/home/won/.pyenv/versions/rospy3/bin/python
+#!/usr/bin/env python
 
 import math
 import rospy
 from geometry_msgs.msg import Twist
 from sensor_msgs.msg import LaserScan
+
 
 class SelfDrive:
     def __init__(self, publisher):
@@ -15,33 +16,38 @@ class SelfDrive:
         Scan_Value_Top = average(scan.ranges[270:315])
         Scan_Value_Bottom = average(scan.ranges[225:270])
         Scan_Value_f = average(scan.ranges[0:1])
-        print(Scan_Value)
-
-
+        print(Scan_Value_f)
+        #if Scan_Value_f >= 1.25:
+         #   turtle_vel.linear.x = 0.15
+          #  print("go")
+           # self.publisher.publish(turtle_vel)
+        #else:
+         #   turtle_vel.angular.z = (math.pi / 2)
+          #  self.publisher.publish(turtle_vel)
+           # print("go turn")
         if Scan_Value >= 0.18 and Scan_Value <= 0.22:
             turtle_vel.linear.x = 0.15
+            turtle_vel.angular.z = 0.0
             print("go")
             self.publisher.publish(turtle_vel)
 
-        elif Scan_Value > 0.22:
+        elif Scan_Value > 0.22 and Scan_Value <= 0.5:
             if(Scan_Value_Top > Scan_Value_Bottom):
                 turtle_vel.angular.z = -(math.pi / 2)
-                turtle_vel.linear.x = 0.14
-                print("R R")
+                turtle_vel.linear.x = 0.14 
+                print("R R") 
                 self.publisher.publish(turtle_vel)
             elif(Scan_Value_Top == Scan_Value_Bottom):
                 turtle_vel.linear.x = 0.15
                 self.publisher.publish(turtle_vel)
-                print("R G")
-            else:
+            else: 
                 turtle_vel.angular.z = (math.pi / 9)
-                self.publisher.publish(turtle_vel)
+                self.publisher.publish(turtle_vel) 
                 turtle_vel.linear.x = 0.08
                 print("R L")
                 self.publisher.publish(turtle_vel)
 
-            #elif Scan_Value < 1.8:
-        else:
+        elif Scan_Value < 1.8:            
             if(Scan_Value_Top > Scan_Value_Bottom):
                 turtle_vel.angular.z = -(math.pi / 9)
                 turtle_vel.linear.x = 0.08
@@ -53,9 +59,22 @@ class SelfDrive:
                 self.publisher.publish(turtle_vel)
             else:
                 turtle_vel.angular.z = (math.pi / 6)
-                turtle_vel.linear.x = 0.14
+                turtle_vel.linear.x = 0.14 
                 print("L L")
                 self.publisher.publish(turtle_vel)
+        else:
+            turtle_vel.linear.x = 0.15
+            turtle_vel.angular.z = 0.0
+            if(scan.ranges[0] <= 0.2):
+                turtle_vel.linear.x = 0.0
+                turtle_vel.angular.z = (math.pi /2)
+                self.publisher.publish(turtle_vel)
+            else:
+                turtle_vel.linear.x = 0.15
+                self.publisher.publish(turtle_vel)
+            print("Go")
+            self.publisher.publish(turtle_vel)
+
 
 def average(list):
     return (sum(list) / len(list))
@@ -71,4 +90,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
